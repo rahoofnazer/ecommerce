@@ -1,22 +1,22 @@
-<form class="row container p-3">
+<form action="" id="checkout-form" class="row container p-3">
     <div class="col-md-6">
 <h1> Enter Delivery Details </h1>
   <div class="form-group row">
     <label for="inputEmail3" class="col-sm-2 col-form-label">Address</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="address" placeholder="Address">
+      <input type="text" class="form-control" name="address" id="address" placeholder="Address">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputPassword3" class="col-sm-2 col-form-label">Pincode</label>
     <div class="col-sm-10">
-      <input type="number" class="form-control" id="pincode" placeholder="Pincode">
+      <input type="number" class="form-control" name="pincode" id="pincode" placeholder="Pincode">
     </div>
   </div>
   <div class="form-group row">
     <label for="inputPassword3" class="col-sm-2 col-form-label">Mobile</label>
     <div class="col-sm-10">
-      <input type="number" class="form-control" id="mobile" placeholder="Mobile">
+      <input type="number" class="form-control" name="mobile" id="mobile" placeholder="Mobile">
     </div>
   </div>
 
@@ -30,16 +30,17 @@
     
       <div class="col-sm-10">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+          <input class="form-check-input" type="radio" name="payment-method"  id="cod" value="cod" checked>
           <label class="form-check-label" for="gridRadios1">
             Cash On Delivery
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+          <input class="form-check-input" type="radio" name="payment-method"  id="online" value="online">
           <label class="form-check-label" for="gridRadios2">
             Online Payment
           </label>
+          <input type="text" name="userId" id="" value="{{user._id}}" hidden>
         </div>
         
       </div>
@@ -53,3 +54,17 @@
   </div>
   </div>
 </form>
+
+<script>
+  $("#checkout-form").submit((e)=>{
+    e.preventDefault()
+    $.ajax({
+      url:'/place-order',
+      method:'post',
+      data:$('#checkout-form').serialize(),
+      success:(response)=>{
+        alert(response)
+      }
+    })
+  })
+</script>
