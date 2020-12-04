@@ -53,7 +53,6 @@
     function changeQuantity(cartId,proId,userId,count){
         let quantity=parseInt(document.getElementById(proId).innerHTML)
         count=parseInt(count)
-        console.log(userId)
 
         $.ajax({
             url:'/change-product-quantity',

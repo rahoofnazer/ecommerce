@@ -89,7 +89,7 @@ router.post('/change-product-quantity',(req,res,next)=>{
   console.log('userid printed on change product quantity  '+req.session.user._id)
 
   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
-    response.total=await userHelpers.getTotalAmount(req.body.user)
+    response.total=await userHelpers.getTotalAmount(req.session.user._id)
     res.json(response)
   })
 })
@@ -107,9 +107,9 @@ router.post('/place-order',async(req,res)=>{
   console.log(req.body)
 })
 router.get('/order-placed' ,verifyLogin, async(req,res)=>{
-  res.render('user/order-placed')
+  res.render('user/order-placed', {user:req.session.user})
 })
-router.get('/orders',async(req,res)=>{
+router.get('/orders',verifyLogin, async(req,res)=>{
   let orders=await userHelpers.getUserOrders(req.session.user._id)
   res.render('user/orders',{user:req.session.user,orders})
 })
