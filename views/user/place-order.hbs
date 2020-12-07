@@ -1,73 +1,125 @@
 <form action="" id="checkout-form" class="row container p-3">
-    <div class="col-md-6">
-<h1> Enter Delivery Details </h1>
-  <div class="form-group row">
-    <label for="inputEmail3" class="col-sm-2 col-form-label">Address</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+  <div class="col-md-6">
+    <h1> Enter Delivery Details </h1>
+    <div class="form-group row">
+      <label for="inputEmail3" class="col-sm-2 col-form-label">Address</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+      </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">Pincode</label>
-    <div class="col-sm-10">
-      <input type="number" class="form-control" name="pincode" id="pincode" placeholder="Pincode">
+    <div class="form-group row">
+      <label for="inputPassword3" class="col-sm-2 col-form-label">Pincode</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" name="pincode" id="pincode" placeholder="Pincode">
+      </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputPassword3" class="col-sm-2 col-form-label">Mobile</label>
-    <div class="col-sm-10">
-      <input type="number" class="form-control" name="mobile" id="mobile" placeholder="Mobile">
+    <div class="form-group row">
+      <label for="inputPassword3" class="col-sm-2 col-form-label">Mobile</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" name="mobile" id="mobile" placeholder="Mobile">
+      </div>
     </div>
-  </div>
 
   </div>
   <div class="col-md-5 mt-5">
 
-<h3>Total amount Rs.{{total}} </h3>
-<p>Payment Method</p>
-  <fieldset class="form-group">
-    <div class="row">
-    
+    <h3>Total amount Rs.{{total}} </h3>
+    <p>Payment Method</p>
+    <fieldset class="form-group">
+      <div class="row">
+
+        <div class="col-sm-10">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="payment-method" id="cod" value="cod" checked>
+            <label class="form-check-label" for="gridRadios1">
+              Cash On Delivery
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="payment-method" id="online" value="online">
+            <label class="form-check-label" for="gridRadios2">
+              Online Payment
+            </label>
+            <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+          </div>
+
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-group row">
       <div class="col-sm-10">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="payment-method"  id="cod" value="cod" checked>
-          <label class="form-check-label" for="gridRadios1">
-            Cash On Delivery
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="payment-method"  id="online" value="online">
-          <label class="form-check-label" for="gridRadios2">
-            Online Payment
-          </label>
-          <input type="text" name="userId" id="" value="{{user._id}}" hidden>
-        </div>
-        
+        <button type="submit" class="btn btn-primary float right pl-3">Check Out</button>
       </div>
     </div>
-  </fieldset>
-  
-  <div class="form-group row">
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary float right pl-3">Check Out</button>
-    </div>
-  </div>
   </div>
 </form>
 
 <script>
-  $("#checkout-form").submit((e)=>{
+  $("#checkout-form").submit((e) => {
     e.preventDefault()
     $.ajax({
-      url:'/place-order',
-      method:'post',
-      data:$('#checkout-form').serialize(),
-      success:(response)=>{
+      url: '/place-order',
+      method: 'post',
+      data: $('#checkout-form').serialize(),
+      success: (response) => {
         alert(response)
-        if(response.status){
-          location.href='/order-placed'
+        if (response.codSuccess) {
+          location.href = '/order-placed'
+        } else {
+          razorpayPayment(response)
         }
       }
     })
   })
+
+  function razorpayPayment(order) {
+    var options = {
+      "key": "rzp_test_Jh8uVdGszQW7wO", // Enter the Key ID generated from the Dashboard
+      "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "crossroads",
+      "description": "Test Transaction",
+      "image": "https://example.com/your_logo",
+      "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response) {
+        {{!-- alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature) --}}
+
+        verifyPayment(response,order)
+      }, 
+      "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9999999999"
+      },
+      "notes": {
+        "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+        "color": "#3399cc"
+      }
+    }
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  };
+
+  function verifyPayment(payment, order) {
+    $.ajax({
+      url: '/verify-payment',
+      data: {
+        payment,
+        order
+      },
+      method: 'post',
+      success:(response)=>{
+        if(response.status){
+          location.href = '/order-placed'
+        }else{
+          alert('Payment failed')
+        }
+      }
+    })
+  }
 </script>

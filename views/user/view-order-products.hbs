@@ -2,15 +2,15 @@
     <section>
         <div class="container">
             <div class="row">
-                {{#each orderItems}}
+                {{#each products}}
                 <div class="col-md-3">
                     <div class="card" style="width: 18rem; height: 25rem;">
-                        <img class="card-img-top" src="/product-images/{{this._id}}.jpg" alt="">
+                        <img class="card-img-top" src="/product-images/{{this.product._id}}.jpg" alt="">
                         <div class="card-body">
-                            <h5 class="card-title">{{this.Name}}</h5>
-                                <h5 class="card-title">₹ {{this.Price}}</h5>
-                            <p class="card-text">{{this.Description}}</p>
-                            <p class="card-text">{{this.quantity}}</p>
+                            <h5 class="card-title">{{this.product.Name}}</h5>
+                                <h5 class="card-title">₹ {{this.product.Price}}</h5>
+                            <p class="card-text">{{this.product.Description}}</p>
+                            <p class="card-text">quantity: {{this.quantity}}</p>
                         </div>
                     </div>
                 </div>
