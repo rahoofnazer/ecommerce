@@ -82,7 +82,7 @@ module.exports = {
                         $inc:{'products.$.quantity':1}
                     }
                     ).then(()=>{
-                        resolve()
+                        resolve({status:true})
                     })
                 }else{
 
@@ -97,7 +97,7 @@ module.exports = {
                         
                     }
                 ).then((response)=>{
-                    resolve()
+                    resolve({status:true})
                 }) 
             }
             }else{
@@ -107,7 +107,7 @@ module.exports = {
                 }
 
                 db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response)=>{
-                    resolve()
+                    resolve({status:true})
                 })
             }
 
