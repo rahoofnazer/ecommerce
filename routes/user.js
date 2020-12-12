@@ -7,7 +7,8 @@ const session = require('express-session');
 const { connect } = require('mongodb');
 
 const verifyLogin=(req,res,next)=>{
-  if(req.session.loggedIn){
+  console.log("Verify login called")
+  if(req.session.user){
     next()
   }else{
     res .redirect('/login') 
@@ -31,11 +32,11 @@ router.get('/',async function(req, res, next) {
 
   
 router.get('/login',(req,res)=>{
-  if(req.session.loggedIn){
+  if(req.session.user){
     res.redirect('/')
   }else{
-    res.render('user/login',{"loginErr":req.session.loginErr} )  }
-    req.session.loginErr=false
+    res.render('user/login',{"loginErr":req.session.userLoginErr} )  }
+    req.session.userLoginErr=false
 })
 
 router.get('/signup', (req,res)=>{
@@ -45,8 +46,9 @@ router.get('/signup', (req,res)=>{
 router.post('/signup', (req,res)=>{
   userHelpers.doSignup(req.body).then((response)=>{
     console.log(response);
-    req.session.loggedIn=true
+    req.session.user.loggedIn=true
     req.session.user=response
+
     res.redirect('/')
   })
 })
@@ -58,7 +60,7 @@ router.post('/login',(req,res)=>{
       req.session.user=response.user
       res.redirect('/')
     }else{
-      req.session.loginErr=true
+      req.session.userLoginErr=true
       res.redirect('/login')
 
       
@@ -68,7 +70,7 @@ router.post('/login',(req,res)=>{
 
 router.get('/logout',verifyLogin,(req,res)=>{
 
-  req.session.destroy()
+  req.session.user=null 
   res.redirect('/') 
 })
 

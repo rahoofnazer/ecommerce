@@ -3,8 +3,15 @@ var express = require('express');
 const { reset } = require('nodemon');
 const productHelpers = require('../helpers/product-helpers');
 var router = express.Router();
+const session = require('express-session');
 var productHelper=require('../helpers/product-helpers')
 
+const verifyAdmin=(req,res,next)=>{
+  console.log("Verify Admin called")
+  if (req.session.admin){
+    
+  }
+}
 
 
 /* GET users listing. */
@@ -15,8 +22,6 @@ router.get('/', function(req, res, next) {
     res.render('admin/view-products',{admin:true,products});
 
   })
-  
-
 });
 router.get('/add-product',function(req,res){
   res.render('admin/add-product')
