@@ -4,25 +4,50 @@ const { reset } = require('nodemon');
 const productHelpers = require('../helpers/product-helpers');
 var router = express.Router();
 const session = require('express-session');
-var productHelper=require('../helpers/product-helpers')
+var adminHelpers=require('../helpers/admin-helpers');
 
 const verifyAdmin=(req,res,next)=>{
   console.log("Verify Admin called")
   if (req.session.admin){
-    
+    next()
+  }else{
+    res.redirect('/')
   }
 }
 
+router.get('/',(req,res)=>{
+res.render('admin/login')
+})
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+// signup in login form method
+
+// router.post('/Login',(req,res)=>{
+// adminHelpers.doSignup(req.body).then((response)=>{
+//   console.log(response)
+//   res.redirect('/admin/viewProducts')
+//   })
+// })
+
+router.post('/Login',(req,res)=>{
+  adminHelpers.doLogin(req.body).then((response)=>{
+    if(response.status){
+      res.redirect('/admin/viewProducts')
+    }else{
+      res.redirect('/admin')
+    }
+  })
+})
+
+
+router.get('/viewProducts', function(req, res, next) {
   productHelpers.getAllProducts().then((products)=>{
 
     console.log(products);
     res.render('admin/view-products',{admin:true,products});
 
   })
-});
+})
+
 router.get('/add-product',function(req,res){
   res.render('admin/add-product')
 })

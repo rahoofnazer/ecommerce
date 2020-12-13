@@ -11,7 +11,7 @@ const verifyLogin=(req,res,next)=>{
   if(req.session.user){
     next()
   }else{
-    res .redirect('/login') 
+    res.redirect('/login') 
   }
 }
 
@@ -121,7 +121,7 @@ router.post('/place-order',async(req,res)=>{
     }
   })
 
-  console.log(req.body,"120,user.js")
+  // console.log(req.body,"120,user.js")
 })
 router.get('/order-placed' ,verifyLogin, async(req,res)=>{
   res.render('user/order-placed', {user:req.session.user})

@@ -1,12 +1,13 @@
-{{#if loginErr}}
+{{!-- {{#if loginErr}}
 <p class="error"> Invalid username or password</p>
-{{/if}}
+{{/if}} --}}
 <h1>Admin Login</h1>
-<form action="/login" method="POST">
+<form action="/admin/Login" method="POST">
 <div class="container">
     <label for=""><b>Email</b></label>
     <br>
-    <input type="text" placeholder="Enter email" name="email" required>
+    <input type="text"  name="Username" value="MfitAdmin" hidden>
+    <input type="text" placeholder="Enter email" name="Email" required>
 <br>
     <label for="Password"><b>Password</b></label>
     <br>
@@ -14,12 +15,7 @@
 <br> <br>
     <button type="submit">Login</button>
 <br>
-    <label>
-        <a href="/signup">
-            <p>Create new account?</p>
-        </a>
-
-    </label>
+    
 
 </div>
 </form>

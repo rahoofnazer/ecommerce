@@ -335,7 +335,7 @@ module.exports = {
               });
         }) 
         },
-        verifyPayment:(details)=>{
+        verifyPayment:      (details)=>{
             return new Promise((resolve,reject)=>{
                 const crypto = require('crypto');
                 let hmac = crypto.createHmac('sha256','t2iSuziflzKyn0QZZCnaykhA')

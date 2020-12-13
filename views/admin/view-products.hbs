@@ -1,16 +1,23 @@
+
+</script>
 <section>
     <div class="container">
       <div class="row">
       <a href="admin/add-product" class="btn btn-primary mt-5 ml-auto">Add Product</a>
         </div>
-        <table class="table mt-5">
-  <thead>
+        <table class="table mt-5" id="table_id">
+  <thead >
     <tr>
       <th scope="col">No</th>
       <th scope="col">Title</th>
       <th scope="col">Category</th>
+      <th scope="col">Price</th>
       <th scope="col">Description</th>
-      <th>Image</th>
+            <th>Image</th>
+
+      <th scope="col">Buttons</th>
+
+
     </tr>
   </thead>
   <tbody>
@@ -33,3 +40,9 @@
 </table>
     </div>
 </section>
+
+<script>
+$(function () {
+    $('#table_id').DataTable();
+} );
+</script>
